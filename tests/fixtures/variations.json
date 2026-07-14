@@ -1,0 +1,32 @@
+[
+    {
+        "id": 733,
+        "sku": "SHIP-BLACK",
+        "price": "20.00",
+        "regular_price": "20.00",
+        "sale_price": "",
+        "manage_stock": true,
+        "stock_quantity": 8,
+        "weight": "1",
+        "virtual": false,
+        "image": {"id": 796, "src": "https://example.com/wp-content/uploads/hoodie-black.jpg", "alt": ""},
+        "attributes": [
+            {"id": 6, "name": "Color", "option": "Black"}
+        ]
+    },
+    {
+        "id": 732,
+        "sku": "SHIP-GREEN",
+        "price": "15.00",
+        "regular_price": "20.00",
+        "sale_price": "15.00",
+        "manage_stock": false,
+        "stock_quantity": null,
+        "weight": "",
+        "virtual": false,
+        "image": null,
+        "attributes": [
+            {"id": 6, "name": "Color", "option": "Green"}
+        ]
+    }
+]

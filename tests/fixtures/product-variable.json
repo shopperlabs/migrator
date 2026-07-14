@@ -1,0 +1,28 @@
+{
+    "id": 799,
+    "name": "Ship Your Idea",
+    "slug": "ship-your-idea",
+    "type": "variable",
+    "status": "publish",
+    "description": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>",
+    "short_description": "",
+    "sku": "",
+    "price": "15.00",
+    "regular_price": "",
+    "sale_price": "",
+    "manage_stock": false,
+    "stock_quantity": null,
+    "weight": "",
+    "virtual": false,
+    "categories": [
+        {"id": 14, "name": "T-shirts", "slug": "t-shirts"}
+    ],
+    "tags": [],
+    "images": [
+        {"id": 795, "src": "https://example.com/wp-content/uploads/hoodie.jpg", "alt": "Hoodie"}
+    ],
+    "attributes": [
+        {"id": 6, "name": "Color", "position": 0, "visible": false, "variation": true, "options": ["Black", "Green"]},
+        {"id": 0, "name": "Material", "position": 1, "visible": true, "variation": false, "options": ["Cotton"]}
+    ]
+}

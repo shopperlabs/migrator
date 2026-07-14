@@ -1,0 +1,4 @@
+[
+    {"id": 9, "name": "Clothing", "parent": 0},
+    {"id": 14, "name": "T-shirts", "parent": 9}
+]

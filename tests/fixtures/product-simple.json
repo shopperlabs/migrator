@@ -1,0 +1,29 @@
+{
+    "id": 794,
+    "name": "Premium Quality T-Shirt",
+    "slug": "premium-quality-t-shirt",
+    "type": "simple",
+    "status": "publish",
+    "description": "<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>",
+    "short_description": "<p>Pellentesque habitant morbi.</p>",
+    "sku": "WOO-TSHIRT-1",
+    "price": "21.99",
+    "regular_price": "21.99",
+    "sale_price": "",
+    "manage_stock": true,
+    "stock_quantity": 3,
+    "weight": "0.5",
+    "virtual": false,
+    "categories": [
+        {"id": 14, "name": "T-shirts", "slug": "t-shirts"}
+    ],
+    "tags": [
+        {"id": 37, "name": "Cotton", "slug": "cotton"},
+        {"id": 38, "name": "Summer", "slug": "summer"}
+    ],
+    "images": [
+        {"id": 792, "src": "https://example.com/wp-content/uploads/tshirt-front.jpg", "alt": "Front"},
+        {"id": 793, "src": "https://example.com/wp-content/uploads/tshirt-back.jpg", "alt": ""}
+    ],
+    "attributes": []
+}

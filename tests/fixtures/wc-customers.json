@@ -1,0 +1,62 @@
+[
+    {
+        "id": 5,
+        "email": "jane@example.com",
+        "first_name": "Jane",
+        "last_name": "Doe",
+        "billing": {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "company": "Acme Inc",
+            "address_1": "12 Main Street",
+            "address_2": "",
+            "city": "Douala",
+            "postcode": "00237",
+            "country": "CM",
+            "state": "",
+            "phone": "+237600000000"
+        },
+        "shipping": {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "company": "",
+            "address_1": "12 Main Street",
+            "address_2": "",
+            "city": "Douala",
+            "postcode": "00237",
+            "country": "CM",
+            "state": "",
+            "phone": ""
+        }
+    },
+    {
+        "id": 6,
+        "email": "john@example.com",
+        "first_name": "",
+        "last_name": "",
+        "billing": {
+            "first_name": "John",
+            "last_name": "Smith",
+            "company": "",
+            "address_1": "5 Oxford Road",
+            "address_2": "",
+            "city": "Nowhere",
+            "postcode": "XX1",
+            "country": "ZZ",
+            "state": "",
+            "phone": ""
+        },
+        "shipping": {
+            "first_name": "",
+            "last_name": "",
+            "company": "",
+            "address_1": "",
+            "address_2": "",
+            "city": "",
+            "postcode": "",
+            "country": "",
+            "state": "",
+            "phone": ""
+        }
+    }
+]

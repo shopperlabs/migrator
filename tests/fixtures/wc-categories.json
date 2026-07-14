@@ -1,0 +1,6 @@
+[
+    {"id": 9, "name": "Clothing", "slug": "clothing", "parent": 0, "description": ""},
+    {"id": 14, "name": "T-shirts", "slug": "t-shirts", "parent": 9, "description": "Soft tees"},
+    {"id": 22, "name": "Food &amp; Beverages", "slug": "food-beverages", "parent": 0, "description": ""},
+    {"id": 30, "name": "Orphan", "slug": "orphan", "parent": 999, "description": ""}
+]
