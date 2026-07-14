@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Shopper\Core\Models\Address;
 use Shopper\Core\Models\Country;
-use Shopper\Migrator\Tests\Stubs\User;
 use Shopper\Migrator\Sources\WooCommerce\Writers\CustomerWriter;
+use Shopper\Migrator\Tests\Stubs\User;
 
 describe(CustomerWriter::class, function (): void {
     it('creates customers with their billing and shipping addresses', function (): void {

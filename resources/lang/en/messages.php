@@ -60,7 +60,6 @@ return [
         'failed' => '{1} :count record failed.|[2,*] :count records failed.',
     ],
 
-
     'errors' => [
         'unauthorized' => 'The store rejected the API credentials. Check the consumer key and secret.',
         'unreachable' => 'The store could not be reached (HTTP :status). Check the store URL.',

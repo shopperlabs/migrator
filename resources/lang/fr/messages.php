@@ -60,7 +60,6 @@ return [
         'failed' => '{1} :count enregistrement en échec.|[2,*] :count enregistrements en échec.',
     ],
 
-
     'errors' => [
         'unauthorized' => 'La boutique a rejeté les identifiants API. Vérifiez la clé et le secret client.',
         'unreachable' => 'La boutique est injoignable (HTTP :status). Vérifiez l\'URL de la boutique.',

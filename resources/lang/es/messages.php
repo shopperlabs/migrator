@@ -60,7 +60,6 @@ return [
         'failed' => '{1} :count registro falló.|[2,*] :count registros fallaron.',
     ],
 
-
     'dock' => [
         'title' => 'Migración en curso',
         'summary' => ':finished de :total tipos de datos migrados.',

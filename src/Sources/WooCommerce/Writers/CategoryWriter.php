@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shopper\Migrator\Sources\WooCommerce\Writers;
 
+use Shopper\Core\Models\Contracts\Category as CategoryContract;
 use Shopper\Migrator\Contracts\EntityWriter;
 use Shopper\Migrator\Support\WriteResult;
-use Shopper\Core\Models\Contracts\Category as CategoryContract;
 use Throwable;
 
 final class CategoryWriter implements EntityWriter

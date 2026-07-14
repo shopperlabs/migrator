@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shopper\Migrator\Sources\WooCommerce\Writers;
 
+use Shopper\Core\Models\Contracts\Brand as BrandContract;
 use Shopper\Migrator\Contracts\EntityWriter;
 use Shopper\Migrator\Support\WriteResult;
-use Shopper\Core\Models\Contracts\Brand as BrandContract;
 use Throwable;
 
 final class BrandWriter implements EntityWriter

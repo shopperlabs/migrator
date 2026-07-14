@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Shopper\Migrator\Sources\WooCommerce\Writers;
 
+use Shopper\Core\Models\ProductTag;
 use Shopper\Migrator\Contracts\EntityWriter;
 use Shopper\Migrator\Support\WriteResult;
-use Shopper\Core\Models\ProductTag;
 use Throwable;
 
 final class TagWriter implements EntityWriter
