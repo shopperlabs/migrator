@@ -12,7 +12,6 @@ use Shopper\Core\Import\ImportManager;
 use Shopper\Core\Traits\HasRegisterConfigAndMigrationFiles;
 use Shopper\Migrator\Console\InstallCommand;
 use Shopper\Migrator\Listeners\SyncProductEntityProgress;
-use Shopper\Migrator\Sources\WooCommerce\WooCommerceMigrationSource;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -55,11 +54,6 @@ final class MigratorServiceProvider extends PackageServiceProvider
     {
         $migrationManager = resolve(MigrationSourceManager::class);
         $importManager = resolve(ImportManager::class);
-
-        $migrationManager->extend(
-            'woocommerce',
-            fn (): WooCommerceMigrationSource => new WooCommerceMigrationSource,
-        );
 
         // A platform is declared once as a migration source; its product ImportSource
         // is derived from it, so the two registries can never drift apart.
