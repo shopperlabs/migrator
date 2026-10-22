@@ -66,6 +66,8 @@ return [
         'request_failed' => 'La requête vers :endpoint a échoué (HTTP :status).',
         'insecure_url' => 'L\'URL de la boutique doit utiliser HTTPS.',
         'forbidden_host' => 'L\'URL de la boutique pointe vers un hôte non autorisé (:host).',
+        'unknown_host' => 'L\'hôte de la boutique est introuvable (:host). Vérifiez l\'URL de la boutique.',
+        'redirected' => 'La boutique redirige vers :host. Utilisez cette adresse comme URL de la boutique.',
         'too_many_attempts' => 'Trop de tentatives. Patientez un instant avant de réessayer.',
     ],
 ];

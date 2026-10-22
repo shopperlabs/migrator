@@ -66,6 +66,8 @@ return [
         'request_failed' => 'The request to :endpoint failed (HTTP :status).',
         'insecure_url' => 'The store URL must use HTTPS.',
         'forbidden_host' => 'The store URL points to a host that is not allowed (:host).',
+        'unknown_host' => 'The store host could not be found (:host). Check the store URL.',
+        'redirected' => 'The store redirects to :host. Use this address as the store URL.',
         'too_many_attempts' => 'Too many attempts. Please wait a moment before trying again.',
     ],
 ];

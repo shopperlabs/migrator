@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Psr7\Request as PsrRequest;
+use GuzzleHttp\Psr7\Response as PsrResponse;
+use GuzzleHttp\Psr7\Uri;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Shopper\Migrator\Exceptions\MigrationException;
 use Shopper\Migrator\Sources\WooCommerce\WooCommerceClient;
@@ -90,9 +94,36 @@ describe(WooCommerceClient::class, function (): void {
         new WooCommerceClient('https://169.254.169.254', 'ck', 'cs');
     })->throws(MigrationException::class);
 
-    it('rejects loopback and internal hostnames', function (): void {
-        new WooCommerceClient('https://localhost', 'ck', 'cs');
+    it('rejects a hostname that resolves to a private address', function (string $address): void {
+        WooCommerceClient::resolveHostsUsing(fn (): array => ['8.8.8.8', $address]);
+
+        new WooCommerceClient('https://store.example.com', 'ck', 'cs');
+    })->with(['127.0.0.1', '10.0.0.5', '169.254.169.254', '100.100.100.200'])->throws(MigrationException::class);
+
+    it('rejects a hostname that does not resolve', function (): void {
+        WooCommerceClient::resolveHostsUsing(fn (): bool => false);
+
+        new WooCommerceClient('https://missing.example.com', 'ck', 'cs');
     })->throws(MigrationException::class);
+
+    it('pins requests to the resolved address and refuses redirects to another host', function (): void {
+        $options = [];
+
+        Http::fake(function (Request $request, array $sent) use (&$options) {
+            $options = $sent;
+
+            return Http::response();
+        });
+
+        wooClient()->testConnection();
+
+        expect($options['curl'][CURLOPT_RESOLVE])->toBe(['store.test:443:8.8.8.8'])
+            ->and(fn () => $options['allow_redirects']['on_redirect'](
+                new PsrRequest('GET', 'https://store.test/wp-json/wc/v3/products'),
+                new PsrResponse(302),
+                new Uri('https://169.254.169.254/latest/meta-data'),
+            ))->toThrow(MigrationException::class);
+    });
 
     it('allows local and plain-http hosts when explicitly enabled', function (): void {
         config(['shopper.migrator.allow_local_hosts' => true]);

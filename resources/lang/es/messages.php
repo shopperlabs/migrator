@@ -71,6 +71,8 @@ return [
         'request_failed' => 'La solicitud a :endpoint falló (HTTP :status).',
         'insecure_url' => 'La URL de la tienda debe usar HTTPS.',
         'forbidden_host' => 'La URL de la tienda apunta a un host no permitido (:host).',
+        'unknown_host' => 'No se encontró el host de la tienda (:host). Verifique la URL de la tienda.',
+        'redirected' => 'La tienda redirige a :host. Use esta dirección como URL de la tienda.',
         'too_many_attempts' => 'Demasiados intentos. Espere un momento antes de volver a intentarlo.',
     ],
 ];
