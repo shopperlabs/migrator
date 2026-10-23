@@ -68,7 +68,7 @@ final class WooCommerceClient
         }
 
         foreach ($addresses as $address) {
-            if (! filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_GLOBAL_RANGE)) {
+            if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_GLOBAL_RANGE) !== $address) {
                 throw new MigrationException(__('shopper-migrator::messages.errors.forbidden_host', ['host' => $this->host]));
             }
         }
