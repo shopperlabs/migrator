@@ -8,10 +8,18 @@ use BladeUI\Icons\BladeIconsServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Shopper\Core\CoreServiceProvider;
 use Shopper\Migrator\MigratorServiceProvider;
+use Shopper\Migrator\Sources\WooCommerce\WooCommerceClient;
 use Spatie\Permission\PermissionServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        WooCommerceClient::resolveHostsUsing(fn (): array => ['8.8.8.8']);
+    }
+
     protected function getPackageProviders($app): array
     {
         return [

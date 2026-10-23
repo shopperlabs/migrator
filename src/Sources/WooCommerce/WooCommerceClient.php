@@ -4,20 +4,39 @@ declare(strict_types=1);
 
 namespace Shopper\Migrator\Sources\WooCommerce;
 
+use Closure;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 use Shopper\Migrator\Exceptions\MigrationException;
 
 final class WooCommerceClient
 {
     public const int MAX_PER_PAGE = 100;
 
+    private static ?Closure $hostResolver = null;
+
+    private readonly string $host;
+
+    private readonly int $port;
+
+    private readonly ?string $address;
+
     public function __construct(
         private readonly string $storeUrl,
         private readonly string $consumerKey,
         private readonly string $consumerSecret,
     ) {
-        $this->assertSafeStoreUrl($storeUrl);
+        $this->host = mb_strtolower((string) parse_url($storeUrl, PHP_URL_HOST));
+        $this->port = (int) (parse_url($storeUrl, PHP_URL_PORT) ?: 443);
+        $this->address = config('shopper.migrator.allow_local_hosts', false) ? null : $this->resolvePublicAddress();
+    }
+
+    public static function resolveHostsUsing(?Closure $resolver): void
+    {
+        self::$hostResolver = $resolver;
     }
 
     public function perPage(): int
@@ -34,41 +53,33 @@ final class WooCommerceClient
         return (bool) config('shopper.migrator.verify_ssl', true);
     }
 
-    /**
-     * Prevent the server from being aimed at internal services (SSRF): require HTTPS and
-     * refuse literal private/reserved IPs and obvious internal hostnames. Reused on every
-     * redirect hop (see request()) so a validated store cannot bounce the server onto an
-     * internal target. Trusted local development opts out via the allow_local_hosts config.
-     */
-    private function assertSafeStoreUrl(string $url): void
+    private function resolvePublicAddress(): string
     {
-        if (config('shopper.migrator.allow_local_hosts', false)) {
-            return;
-        }
-
-        if (! str_starts_with(mb_strtolower($url), 'https://')) {
+        if (! str_starts_with(mb_strtolower($this->storeUrl), 'https://')) {
             throw new MigrationException(__('shopper-migrator::messages.errors.insecure_url'));
         }
 
-        $host = mb_strtolower((string) parse_url($url, PHP_URL_HOST));
+        $addresses = filter_var($this->host, FILTER_VALIDATE_IP)
+            ? [$this->host]
+            : (self::$hostResolver ?? gethostbynamel(...))($this->host);
 
-        if ($host === '') {
-            throw new MigrationException(__('shopper-migrator::messages.errors.forbidden_host', ['host' => $url]));
+        if ($this->host === '' || ! $addresses) {
+            throw new MigrationException(__('shopper-migrator::messages.errors.unknown_host', ['host' => $this->host ?: $this->storeUrl]));
         }
 
-        if (filter_var($host, FILTER_VALIDATE_IP)) {
-            if (! filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-                throw new MigrationException(__('shopper-migrator::messages.errors.forbidden_host', ['host' => $host]));
+        foreach ($addresses as $address) {
+            if (filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_GLOBAL_RANGE) !== $address) {
+                throw new MigrationException(__('shopper-migrator::messages.errors.forbidden_host', ['host' => $this->host]));
             }
-
-            return;
         }
 
-        if ($host === 'localhost'
-            || str_ends_with($host, '.localhost')
-            || str_ends_with($host, '.local')
-            || str_ends_with($host, '.internal')) {
-            throw new MigrationException(__('shopper-migrator::messages.errors.forbidden_host', ['host' => $host]));
+        return $addresses[0];
+    }
+
+    private function assertSameStore(RequestInterface $request, ResponseInterface $response, UriInterface $uri): void
+    {
+        if ($this->address !== null && ($uri->getHost() !== $this->host || ($uri->getPort() ?? 443) !== $this->port)) {
+            throw new MigrationException(__('shopper-migrator::messages.errors.redirected', ['host' => $uri->getHost()]));
         }
     }
 
@@ -192,18 +203,17 @@ final class WooCommerceClient
             ->withBasicAuth($this->consumerKey, $this->consumerSecret)
             ->withOptions([
                 'verify' => $this->verifySsl(),
-                // A validated store URL can still 3xx the server onto an internal target, so
-                // re-run the SSRF guard on every hop and refuse any downgrade to plain http.
                 'allow_redirects' => [
                     'max' => 5,
                     'strict' => true,
                     'referer' => false,
                     'protocols' => ['https'],
-                    'on_redirect' => function ($request, $response, $uri): void {
-                        $this->assertSafeStoreUrl((string) $uri);
-                    },
+                    'on_redirect' => $this->assertSameStore(...),
                 ],
             ])
+            ->when($this->address !== null, fn (PendingRequest $request): PendingRequest => $request->withOptions([
+                'curl' => [CURLOPT_RESOLVE => ["{$this->host}:{$this->port}:{$this->address}"]],
+            ]))
             ->timeout(60)
             ->retry(3, 1000, throw: false)
             ->acceptJson();
